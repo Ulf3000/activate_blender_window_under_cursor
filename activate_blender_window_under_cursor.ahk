@@ -1,5 +1,5 @@
 #Persistent
-; This is for all other windows ; source : https://www.autohotkey.com/boards/viewtopic.php?t=82639
+; This is for all other windows ; source : https://www.autohotkey.com/boards/viewtopic.php?t=82639 , also called xmouse settings
 SetActiveWindowTracking(Track:=True, Delay:=0, ToTop:=False) {
       ; SPI_SETACTIVEWINDOWTRACKING = 0x1001
       ; SPI_SETACTIVEWNDTRKZORDER   = 0x100D
@@ -12,8 +12,7 @@ SetActiveWindowTracking(Track:=True, Delay:=0, ToTop:=False) {
 }
 SetActiveWindowTracking(True)
 
-
-;blender specific part starts here
+; ----------------blender specific part starts here ---------------------
 
 SetTimer, WatchCursor, 200
 return
@@ -29,10 +28,8 @@ WatchCursor:
         If GetKeyState("LButton", "P")      ; same fix for dragging a window over a blender window and it disappearing
             return
         active_hwnd := WinExist("A")        ; get hwnd of active window
-        ToolTip %active_hwnd%
+        ;ToolTip %active_hwnd%
         if(active_hwnd != WindowID){        ; if its already activated by windows dont do anything , if not activate window 
             WinActivate, ahk_id %WindowID%  
         }
     }
- ;ToolTip, processname %old_ahk_exe%  ahk_id %old_ahk_id%
-return
