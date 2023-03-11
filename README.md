@@ -6,3 +6,7 @@ this fails though when you use multiple windows, like for example putting your s
 You then always have to click the window first, which is confusing. 
 
 this script takes care of that. So if blender is the active app , it will automatically activate the different blender windows under the cursor 
+
+---------------------------
+
+run the blender_console_ontop.ahk script also, to get your console window back and it not vanishing behind the blender window 
