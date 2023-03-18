@@ -1,28 +1,26 @@
-#Persistent
+;----------------------general startup options for scripts--------------------------------
+#NoEnv
+#SingleInstance, Force
+SendMode, Input
+SetBatchLines, -1
+SetWorkingDir, %A_ScriptDir%
 
-processName := "blender.exe"
+;-----------------------the script starts here -------------------------------------------
+; this dll call fires a message whenever a window is opened or restored.
+; No need for looping through windows every 0,5 seconds or crap like that. 
+; use it whenever you wanna do something to a newly opened window
+DllCall( "RegisterShellHookWindow", UInt,A_ScriptHwnd )
+MsgNum := DllCall( "RegisterWindowMessage", Str,"SHELLHOOK" )
+OnMessage( MsgNum, "ShellMessage" )
+Return 
 
-SetTimer, CheckConsoleWindow, 1000
-return
-
-CheckConsoleWindow:
-if WinExist("ahk_class ConsoleWindowClass")
-{
-    WinGet, consoleWin, ID, ahk_class ConsoleWindowClass
-    WinGet, consolePID, PID, ahk_id %consoleWin%
-    if (ProcessExist(processName, consolePID))
-    {
-        WinSet, AlwaysOnTop, On, ahk_id %consoleWin% ; Set the window to always be on top
-        ; Do something else here, e.g. send a keystroke or show a message box
+ShellMessage(wParam, lParam) {
+    WinGet, new_PID, PID, ahk_id %lParam%           ; get PID of the new window
+    WinGet, new_exe, ProcessName, ahk_id %lParam%   ; get Processname of the PID
+    WinGetClass, new_Class, ahk_id %lParam%         ;get the class of the new window
+    ;ToolTip %new_Class% %new_PID% %new_exe%
+    if (new_exe == "blender.exe" && new_Class == "ConsoleWindowClass"){
+        WinSet, AlwaysOnTop, On, ahk_id %lParam%    ; Set the window to always be on top
     }
 }
-return
 
-ProcessExist(processName, pid)
-{
-    Process, Exist, %processName%
-    if ErrorLevel && ErrorLevel = pid
-        return true
-    else
-        return false
-}
